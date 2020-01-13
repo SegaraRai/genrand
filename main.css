@@ -1,0 +1,45 @@
+.audio.audio-x-container {
+  margin-bottom: 2em;
+}
+
+.audio {
+  display: flex;
+  flex-flow: row nowrap;
+  align-items: center;
+  margin: 1em 0;
+}
+
+.audio strong {
+  display: block;
+  width: 2em;
+}
+
+.select-button {
+  display: inline-block;
+  width: 6em;
+  margin-right: 2em;
+}
+
+.select-container {
+  margin-top: 2em;
+}
+
+.finish-container {
+  display: flex;
+  flex-flow: row nowrap;
+  justify-content: flex-end;
+}
+
+#tab-content {
+  padding-top: 1em;
+}
+
+.progress {
+  height: 1.5em;
+  margin-bottom: 1em;
+}
+
+.progress div {
+  white-space: nowrap;
+  word-break: keep-all;
+}

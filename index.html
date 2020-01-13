@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>ランダム文字列ジェネレータ</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css"
+    integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
+  <link rel="stylesheet" href="main.css">
+</head>
+
+<body>
+  <div class="container">
+    <h1>ランダム文字列ジェネレータ</h1>
+    <p>
+      よくあるランダム文字列ジェネレータ<br>
+      <code>Modulo bias</code>がないこと（多分…）と、Web Cryptograpy APIの<code>getRandomValues</code>を使っていることが自慢です<br>
+      フォームはKeePassを真似てます<br>
+    </p>
+    <form>
+      <div class="form-group row">
+        <label for="length" class="col-sm-2 col-form-label">生成数</label>
+        <div class="input-group col-sm-10">
+          <input type="number" class="form-control chars-observe" id="size" value="100">
+          <div class="input-group-append">
+            <span class="input-group-text">個</span>
+          </div>
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="length" class="col-sm-2 col-form-label">長さ</label>
+        <div class="input-group col-sm-10">
+          <input type="number" class="form-control chars-observe" id="length" value="8">
+          <div class="input-group-append">
+            <span class="input-group-text">文字</span>
+          </div>
+        </div>
+      </div>
+      <fieldset class="form-group">
+        <div class="row">
+          <legend class="col-form-label col-sm-2 pt-0">文字種</legend>
+          <div class="col-sm-10">
+            <div class="form-row">
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-uppercase" data-name="uc" data-chars="ABCDEFGHIJKLMNOPQRSTUVWXYZ">
+                  <label class="form-check-label" for="chars-uppercase">大文字（<code>A, B, C, …</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-lowercase" data-name="lc" data-chars="abcdefghijklmnopqrstuvwxyz">
+                  <label class="form-check-label" for="chars-lowercase">小文字（<code>a, b, c, …</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-digit" data-name="di" data-chars="0123456789">
+                  <label class="form-check-label" for="chars-digit">数字（<code>0, 1, 2, …</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-hyphen" data-name="hy" data-chars="-">
+                  <label class="form-check-label" for="chars-hyphen">ハイフン（<code>-</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-underscore" data-name="us" data-chars="_">
+                  <label class="form-check-label" for="chars-underscore">アンダースコア（<code>_</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-space" data-name="sp" data-chars=" ">
+                  <label class="form-check-label" for="chars-space">スペース<code>&nbsp;</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-special" data-name="sl" data-chars="!&#34;&#35;$%&#38;&#39;*+,./:;=?@&#92;^&#96;|~">
+                  <label class="form-check-label" for="chars-special">特殊記号（<code>!, ", #, …</code>）</label>
+                </div>
+              </div>
+              <div class="col-md-6">
+                <div class="form-group form-check">
+                  <input type="checkbox" class="form-check-input chars-observe chars-checkbox" id="chars-bracket" data-name="br" data-chars="[]{}()&#60;&#61;">
+                  <label class="form-check-label" for="chars-bracket">括弧（<code>[, ], {, }, (, ), &#60;, &#61;</code>）</label>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-12">
+                <label for="chars-supplement">追加で使用する文字</label>
+                <input type="text" class="form-control chars-observe chars-text" id="chars-supplement">
+              </div>
+            </div>
+          </div>
+        </div>
+      </fieldset>
+      <button type="button" class="btn btn-primary" id="generate">生成</button>
+    </form>
+    <hr>
+    <form>
+      <div class="form-group row">
+        <label for="parmanentlink" class="col-sm-4 col-form-label">パーマネントリンク</label>
+        <div class="col-sm-8">
+          <input type="text" readonly class="form-control-plaintext" id="parmanentlink">
+        </div>
+      </div>
+      <div class="form-group">
+        <label for="list">ランダム文字列リスト</label>
+        <textarea class="form-control" id="list" rows="8"></textarea>
+      </div>
+    </form>
+  </div>
+
+  <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js"
+    integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n"
+    crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
+    integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+    crossorigin="anonymous"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"
+    integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6"
+    crossorigin="anonymous"></script>
+  <script src="main.js"></script>
+</body>
+</body>
+
+</html>
