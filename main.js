@@ -14,6 +14,10 @@
      * @param {number} m
      */
     constructor(m) {
+      if (m < 1) {
+        throw new Error('m must be greater than 0');
+      }
+
       this.m = m;
       this.buffer = new Uint32Array(bufferLength);
       this.offset = 0;
@@ -112,12 +116,14 @@
     const length = parseInt(document.getElementById('length').value, 10);
 
     let list = [];
-    for (let i = 0; i < size; i++) {
-      let text = '';
-      for (let j = 0; j < length; j++) {
-        text += gChars[gRng.generate()];
+    if (gChars) {
+      for (let i = 0; i < size; i++) {
+        let text = '';
+        for (let j = 0; j < length; j++) {
+          text += gChars[gRng.generate()];
+        }
+        list.push(text);
       }
-      list.push(text);
     }
 
     document.getElementById('list').value = list.join('\n');
@@ -125,6 +131,7 @@
 
   function updateRng() {
     const tempChars = Array.from(document.querySelectorAll('.chars-checkbox:checked')).map(element => element.dataset.chars).join('') + document.getElementById('chars-supplement').value;
+
     const charSet = new Set([...tempChars]);
     charSet.delete('\u0008');
     charSet.delete('\u000a');
@@ -133,8 +140,9 @@
     charSet.delete('\u0085');
     charSet.delete('\u2028');
     charSet.delete('\u2029');
+
     gChars = Array.from(charSet).join('');
-    gRng = new RNG(gChars.length);
+    gRng = gChars ? new RNG(gChars.length) : null;
 
     generate();
   }
