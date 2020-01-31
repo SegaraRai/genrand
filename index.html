@@ -94,8 +94,14 @@
             </div>
             <div class="form-row">
               <div class="form-group col-sm-12">
-                <label for="chars-supplement">追加で使用する文字</label>
-                <input type="text" class="form-control chars-observe chars-text" id="chars-supplement">
+                <label for="chars-include">追加で使用する文字</label>
+                <input type="text" class="form-control chars-observe chars-text" id="chars-include">
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group col-sm-12">
+                <label for="chars-exclude">除外する文字</label>
+                <input type="text" class="form-control chars-observe chars-text" id="chars-exclude">
               </div>
             </div>
           </div>
@@ -109,6 +115,12 @@
         <label for="parmanentlink" class="col-sm-4 col-form-label">パーマネントリンク</label>
         <div class="col-sm-8">
           <input type="text" readonly class="form-control-plaintext" id="parmanentlink">
+        </div>
+      </div>
+      <div class="form-group row">
+        <label for="chars" class="col-sm-4 col-form-label">使用される文字 (<span id="chars-length"></span>)</label>
+        <div class="col-sm-8">
+          <input type="text" readonly class="form-control-plaintext" id="chars">
         </div>
       </div>
       <div class="form-group">

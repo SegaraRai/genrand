@@ -3,7 +3,8 @@
     size: '100',
     length: '8',
     preset: 'di,lc,uc',
-    supplement: '',
+    include: '',
+    exclude: '',
   };
 
   const bufferLength = 256;
@@ -94,7 +95,8 @@
 
     document.getElementById('size').value = param.size;
     document.getElementById('length').value = param.length;
-    document.getElementById('chars-supplement').value = param.supplement;
+    document.getElementById('chars-include').value = param.include;
+    document.getElementById('chars-exclude').value = param.exclude;
   }
 
 
@@ -103,7 +105,8 @@
       size: document.getElementById('size').value,
       length: document.getElementById('length').value,
       preset: Array.from(document.querySelectorAll('.chars-checkbox:checked')).map(element => element.dataset.name).sort().join(','),
-      supplement: document.getElementById('chars-supplement').value,
+      include: document.getElementById('chars-include').value,
+      exclude: document.getElementById('chars-exclude').value,
     };
   }
 
@@ -130,7 +133,7 @@
   }
 
   function updateRng() {
-    const tempChars = Array.from(document.querySelectorAll('.chars-checkbox:checked')).map(element => element.dataset.chars).join('') + document.getElementById('chars-supplement').value;
+    const tempChars = Array.from(document.querySelectorAll('.chars-checkbox:checked')).map(element => element.dataset.chars).join('') + document.getElementById('chars-include').value;
 
     const charSet = new Set([...tempChars]);
     charSet.delete('\u0008');
@@ -141,8 +144,15 @@
     charSet.delete('\u2028');
     charSet.delete('\u2029');
 
-    gChars = Array.from(charSet).join('');
+    for (const char of document.getElementById('chars-exclude').value) {
+      charSet.delete(char);
+    }
+
+    gChars = Array.from(charSet).sort().join('');
     gRng = gChars ? new RNG(gChars.length) : null;
+
+    document.getElementById('chars').value = gChars;
+    document.getElementById('chars-length').innerText = gChars.length.toString();
 
     generate();
   }
