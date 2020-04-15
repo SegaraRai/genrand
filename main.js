@@ -20,6 +20,10 @@
       }
 
       this.m = m;
+      if (this.m === 1) {
+        return;
+      }
+
       this.buffer = new Uint32Array(bufferLength);
       this.offset = 0;
       /** @type {number[]} */
@@ -43,6 +47,10 @@
      * @returns {number}
      */
     generate() {
+      if (this.m === 1) {
+        return 0;
+      }
+
       while (this.stack.length === 0) {
         if (this.offset === 0) {
           crypto.getRandomValues(this.buffer);
